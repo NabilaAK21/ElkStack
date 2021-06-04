@@ -1,8 +1,11 @@
 ## Automated ELK Stack Deployment
+This document contains the following details:
+
 
 The files in this repository were used to configure the network depicted below.
 
-![TODO: Update the path with the name of your diagram] 
+Elk Stack Topology ![Project diagram1](https://user-images.githubusercontent.com/84750781/120741114-732d9a00-c4c2-11eb-8105-e6d68fbb40f4.png)
+
 
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the "D*mn file may be used to install only certain pieces of it, such as Filebeat.
@@ -50,7 +53,7 @@ The machines on the internal network are not exposed to the public Internet.
 Only the jump box machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
 - 40.78.129.161
 
-Machines within the network can only be accessed by each other.
+Machines within the network can only be accessed by each other.The DVWA 1 and DVWA 2 VMs send traffic to the ELK server.
 - : Which machine did you allow to access your ELK VM? What was its IP address?_
 -Ansible 13.67.211.160
 
@@ -73,7 +76,8 @@ Availability Zone 2: ELK
 ### Elk Configuration
 
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
-- _TODO: What is the main advantage of automating configuration with Ansible?_
+- : What is the main advantage of automating configuration with Ansible?_
+- * Ansible is a simple automation language that can perfectly describe an IT application infrastructure. Ansible lets you model even highly complex IT workflows also it is felxible.
 
 
 The playbook implements the following tasks:
