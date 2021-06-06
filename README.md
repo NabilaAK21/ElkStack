@@ -8,9 +8,10 @@ Elk Stack Topology ![Project diagram1](https://user-images.githubusercontent.com
 
 
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the "D*mn file may be used to install only certain pieces of it, such as Filebeat.
+These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the Damn file may be used to install only certain pieces of it, such as Filebeat.
 
-  - _TODO: Enter the playbook file._
+  -: Enter the playbook file._
+  ansible-playbook install_elk.yml elk
 
 This document contains the following details:
 - Description of the Topologu
@@ -26,16 +27,16 @@ This document contains the following details:
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the Vulnerable Web Application.
 
 Load balancing ensures that the application will be highly available, in addition to restricting inbound access to the network.
-- The load balancer ensures that work to process incoming traffic will be shared by both vulnerable web servers. Access controls will ensure that only authorized users — namely, ourselves — will be able to connect in the first place.
+- The load balancer ensures that work to process incoming traffic will be shared by both vulnerable web servers. Access controls will ensure that only authorized users —Web-1 and Web-2, ourselves — will be able to connect in the first place.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the file system of the VMs onthe network as well as watch system metrics, such as CPU usage; attempted SSH logins; sudo escalation failures; etc.
 
 - What does Filebeat watch for?_
-Filebeat is a lightweight shipper for forwarding and centralizing log data. Installed as an agent on your servers. Filebeat monitors the log files or locations that you specify, collects log events, and forwards them to Elasticsearch or Logstash for indexing.
+- * Filebeat: Filebeat detects changes to the filesystem. Specifically, we use it to collect Apache logs.
+
 
 - What does Metricbeat record?_
-Metricbeat detects changes in system metrics, such as CPU usage. We use it to detect SSH login attempts, failed sudo escalations, and CPU/RAM statistics
-
+- *  Metricbeat: Metricbeat detects changes in system metrics, such as CPU usage. We use it to detect SSH login attempts, failed sudo escalations, and CPU/RAM statistics. 
 
 The configuration details of each machine may be found below.
 
@@ -44,7 +45,7 @@ The configuration details of each machine may be found below.
 | Jump Box |  Gateway    | 10.0.0.4   | Linux            |
 | DVWA 1   |  Web Server | 10.0.0.5   | Linux            |
 | DVWA 2   |  Web Server | 10.0.0.6   | Linux            |
-| ELK      |  Monitoring | 10.0.0.8   | Linux            |
+| ELK      |  Monitoring | 10.0.0.7   | Linux            |
 
 ### Access Policies
 
@@ -55,7 +56,7 @@ Only the jump box machine can accept connections from the Internet. Access to th
 
 Machines within the network can only be accessed by each other.The DVWA 1 and DVWA 2 VMs send traffic to the ELK server.
 - : Which machine did you allow to access your ELK VM? What was its IP address?_
--Ansible 13.67.211.160
+-Ansible 10.0.0.6
 
 A summary of the access policies in place can be found in the table below.
 
@@ -87,7 +88,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](Images/docker_ps_output.png)
+![TODO: Update the path with the name of your screenshot of docker ps output](<img width="593" alt="DockerImage" src="https://user-images.githubusercontent.com/84750781/120912121-9b500100-c65a-11eb-9ce4-c9ef2892e8b8.png">)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -96,16 +97,13 @@ This ELK server is configured to monitor the following machines:
 
 We have installed the following Beats on these machines:
 - : Specify which Beats you successfully installed_
-* Filebeat: Filebeat detects changes to the filesystem. Specifically, we use it to collect Apache logs.
-
-* Metricbeat: Metricbeat detects changes in system metrics, such as CPU usage. We use it to detect SSH login attempts, failed sudo escalations, and CPU/RAM statistics.
-
-* Packetbeat: Packetbeat collects packets that pass through the NIC, similar to Wireshark. We use it to generate a trace of all activity that takes place on the network, in case later forensic analysis should be warranted.
+* 
 
 
 
 These Beats allow us to collect the following information from each machine:
 - : In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
+- * Packetbeat: Packetbeat collects packets that pass through the NIC, similar to Wireshark. We use it to generate a trace of all activity that takes place on the network, in case later forensic analysis should be warranted.
 
 * The playbook below installs Metricbeat on the target hosts. The playbook for installing Filebeat is not included, but looks essentially identical — simply replace metricbeat with filebeat, and it will work as expected.
  name: Install metric beat
