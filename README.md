@@ -83,12 +83,16 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
 
 The playbook implements the following tasks:
 - _TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc._
-- ...
-- ...
+- ...Install Docker contaner in Ansible
+- ...Download image
+- ...Nano a filebeat Playbook
+- ...Run the Ansible Playbook filebeat.yml
 
+<img width="1093" alt="Docker io" src="https://user-images.githubusercontent.com/84750781/120958716-4679bc80-c726-11eb-816c-62bf8f38cb7b.png">
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](<img width="593" alt="DockerImage" src="https://user-images.githubusercontent.com/84750781/120912121-9b500100-c65a-11eb-9ce4-c9ef2892e8b8.png">)
+![TODO: Update the path with the name of your screenshot of docker ps output](<![image](https://user-images.githubusercontent.com/84750781/120958773-64dfb800-c726-11eb-92c9-e151858437ce.png)
+>)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -97,13 +101,13 @@ This ELK server is configured to monitor the following machines:
 
 We have installed the following Beats on these machines:
 - : Specify which Beats you successfully installed_
-* 
-
-
+* Filebeat and Metricbeat
 
 These Beats allow us to collect the following information from each machine:
 - : In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
 - * Packetbeat: Packetbeat collects packets that pass through the NIC, similar to Wireshark. We use it to generate a trace of all activity that takes place on the network, in case later forensic analysis should be warranted.
+- * Filebeat: Collects log events, and forwards them either to Elastisearch or Logstash for indexing.
+- * Metricbeat: Collects metrics from the operating system and from services running on the server.
 
 * The playbook below installs Metricbeat on the target hosts. The playbook for installing Filebeat is not included, but looks essentially identical — simply replace metricbeat with filebeat, and it will work as expected.
  name: Install metric beat
@@ -142,12 +146,59 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbooks file to Ansible Control Node.
-- Update the _____ file to include...
-- Run the playbook, and navigate to  to check that the installation worked as expected.
+- Update the 
+ ---
+ - name: Filebeat Playbook
+   hosts: webservers
+   become: true
+   tasks:
+   - name: Download Filebeat deb file
+     get_url:
+       url: https:// artifacts.elastics.co/downloads/beats/filebeat/filebeat-7.6.1-amd64.deb
+       dest: /home/jaasemrahman/filebeat.deb
+   - name: Install Filebeat deb
+     apt:
+       deb: /home/jaasemrahman/filebeat.deb
+   - name: Copy Configuration
+     copy:
+       src: /etc/ansible/files/filebeat-config.yml
+       dest: etc/filebeat/filebeat.yml
+   - name: Enable and Configure System Module
+     command: filebeat modules enable system
+   - name: Filebeat Setup
+     command: filebeat setup
+   - name: Start Filebeat
+     service: filebeat start yes  
+     
+- Run the playbook, and navigate to Kibana, systemLogs to check that the installation worked as expected.
 
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
+_: Answer the following questions to fill in the blanks:_
+- _Which file is the playbook?
+- * hosts file
+- _Which file do you update to make Ansible run the playbook on a specific machine? 
+- Update Ansible Control Node
+- How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
+- You must create a hosts file to specify which VMs to run each playbook on. Run the commands below:
+$ cd /etc/ansible
+$ cat > hosts <<EOF
+[webservers]
+10.0.0.5
+10.0.0.6
+
+[elk]
+10.0.0.8
+EOF
+- Where filebeat is installed using Ansible docker container
+- Elk
 - _Which URL do you navigate to in order to check that the ELK server is running?
+- curl http://10.0.0.8:5601
 
 _As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+                    
+-$ cd /etc/ansible
+                    
+$ ansible-playbook install_elk.yml elk
+                    
+$ ansible-playbook install_filebeat.yml webservers
+                    
+$ ansible-playbook install_metricbeat.yml webservers
